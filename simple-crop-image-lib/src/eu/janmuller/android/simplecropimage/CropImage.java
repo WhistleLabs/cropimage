@@ -195,6 +195,12 @@ public class CropImage extends MonitoredActivity {
                     }
                 });
 
+        // Whistle mod: Disable for now to prevent OutOfMemoryError
+        findViewById(R.id.rotateLeft).setVisibility(View.GONE);
+        findViewById(R.id.rotateLeft).setEnabled(false);
+        findViewById(R.id.rotateLeft).setOnClickListener(null);
+        // End Whistle mod
+
         findViewById(R.id.rotateRight).setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View v) {
@@ -205,6 +211,13 @@ public class CropImage extends MonitoredActivity {
                         mRunFaceDetection.run();
                     }
                 });
+
+        // Whistle mod: Disable for now to prevent OutOfMemoryError
+        findViewById(R.id.rotateRight).setVisibility(View.GONE);
+        findViewById(R.id.rotateRight).setEnabled(false);
+        findViewById(R.id.rotateRight).setOnClickListener(null);
+        // End Whistle mod
+
         startFaceDetection();
     }
 
