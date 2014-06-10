@@ -241,6 +241,7 @@ public class CropImage extends MonitoredActivity {
                     return BitmapFactory.decodeStream(in, null, o2);
                 } catch (OutOfMemoryError e) {
                     // Don't return-- keep looping until our inSampleSize doesn't throw OOME
+                    Log.e(TAG, "Decoding bitmap with inSampleSize=" + o2.inSampleSize + " failed. Retrying with inSampleSize= " + (o2.inSampleSize * 2), e);
                 } finally {
                     if (in != null) {
                         in.close();
