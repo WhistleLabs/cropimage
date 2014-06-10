@@ -195,12 +195,6 @@ public class CropImage extends MonitoredActivity {
                     }
                 });
 
-        // Whistle mod: Disable for now to prevent OutOfMemoryError
-        findViewById(R.id.rotateLeft).setVisibility(View.GONE);
-        findViewById(R.id.rotateLeft).setEnabled(false);
-        findViewById(R.id.rotateLeft).setOnClickListener(null);
-        // End Whistle mod
-
         findViewById(R.id.rotateRight).setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View v) {
@@ -211,13 +205,6 @@ public class CropImage extends MonitoredActivity {
                         mRunFaceDetection.run();
                     }
                 });
-
-        // Whistle mod: Disable for now to prevent OutOfMemoryError
-        findViewById(R.id.rotateRight).setVisibility(View.GONE);
-        findViewById(R.id.rotateRight).setEnabled(false);
-        findViewById(R.id.rotateRight).setOnClickListener(null);
-        // End Whistle mod
-
         startFaceDetection();
     }
 
@@ -247,11 +234,24 @@ public class CropImage extends MonitoredActivity {
 
             BitmapFactory.Options o2 = new BitmapFactory.Options();
             o2.inSampleSize = scale;
-            in = mContentResolver.openInputStream(uri);
-            Bitmap b = BitmapFactory.decodeStream(in, null, o2);
-            in.close();
+            for(o2.inSampleSize = scale; o2.inSampleSize <= 32; o2.inSampleSize *= 2) {
+                try {
+                    in = mContentResolver.openInputStream(uri);
 
-            return b;
+                    return BitmapFactory.decodeStream(in, null, o2);
+                } catch (OutOfMemoryError e) {
+                    // Don't return-- keep looping until our inSampleSize doesn't throw OOME
+                } finally {
+                    if (in != null) {
+                        in.close();
+                    }
+                }
+            }
+
+            if(o2.inSampleSize > 32) { // Failed to avoid OutOfMemoryError
+                Toast.makeText(this, "Rotation failed", Toast.LENGTH_LONG).show();
+                throw new OutOfMemoryError("Rotation failed.  inSampleSize was increased to " + o2.inSampleSize + ", but still we hit OutOfMemoryError.");
+            }
         } catch (FileNotFoundException e) {
             Log.e(TAG, "file " + path + " not found");
         } catch (IOException e) {
