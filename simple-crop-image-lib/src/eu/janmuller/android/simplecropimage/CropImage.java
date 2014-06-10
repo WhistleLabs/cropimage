@@ -56,7 +56,7 @@ import android.widget.Toast;
  */
 public class CropImage extends MonitoredActivity {
 
-    final int IMAGE_MAX_SIZE = 1024;
+    final int IMAGE_MAX_SIZE = 2048;
 
     private static final String TAG                    = "CropImage";
     public static final  String IMAGE_PATH             = "image-path";
