@@ -46,6 +46,7 @@ import android.os.Handler;
 import android.os.StatFs;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -192,6 +193,14 @@ public class CropImage extends MonitoredActivity {
                         RotateBitmap rotateBitmap = new RotateBitmap(mBitmap);
                         mImageView.setImageRotateBitmapResetBase(rotateBitmap, true);
                         mRunFaceDetection.run();
+                        mImageView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                            @Override
+                            public boolean onPreDraw() {
+                                mImageView.getViewTreeObserver().removeOnPreDrawListener(this);
+                                mImageView.center(true, true);
+                                return true;
+                            }
+                        });
                     }
                 });
 
@@ -203,6 +212,14 @@ public class CropImage extends MonitoredActivity {
                         RotateBitmap rotateBitmap = new RotateBitmap(mBitmap);
                         mImageView.setImageRotateBitmapResetBase(rotateBitmap, true);
                         mRunFaceDetection.run();
+                        mImageView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                            @Override
+                            public boolean onPreDraw() {
+                                mImageView.getViewTreeObserver().removeOnPreDrawListener(this);
+                                mImageView.center(true, true);
+                                return true;
+                            }
+                        });
                     }
                 });
         startFaceDetection();

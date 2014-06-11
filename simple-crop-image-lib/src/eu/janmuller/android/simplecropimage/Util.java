@@ -236,17 +236,22 @@ public class Util {
         int minWidth = 512;
         int minHeight = 512;
 
-        while(outWidth > minWidth && outHeight > minHeight) {
+        Bitmap rotated = null;
+        while (outWidth > minWidth && outHeight > minHeight) {
             try {
                 float scaleWidth = ((float) outWidth) / srcWidth;
                 float scaleHeight = ((float) outHeight) / srcHeight;
                 matrix.postScale(scaleWidth, scaleHeight);
-                
-                Bitmap bmp = Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);
+
+                rotated = Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);
                 src.recycle();
 
-                return bmp;
+                return rotated;
             } catch (OutOfMemoryError e) {
+                if (null != rotated) {
+                   rotated.recycle();
+                }
+
                 outWidth /= 2;
                 outHeight /= 2;
 
@@ -254,8 +259,8 @@ public class Util {
             }
         }
 
-        Toast.makeText(activity, "Failed to rotate image: not enough memory", Toast.LENGTH_LONG).show();
-        return null;
+        Toast.makeText(activity, "Failed to rotate image: not enough memory.", Toast.LENGTH_LONG).show();
+        return src;
     }
 
     public static int getOrientationInDegree(Activity activity) {
