@@ -20,7 +20,9 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.graphics.*;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Surface;
+import android.widget.Toast;
 
 import java.io.Closeable;
 
@@ -219,13 +221,41 @@ public class Util {
     }
 
     // Thong added for rotate
-    public static Bitmap rotateImage(Bitmap src, float degree) {
+    public static Bitmap rotateImage(Activity activity, Bitmap src, float degree) {
         // create new matrix
         Matrix matrix = new Matrix();
         // setup rotation degree
         matrix.postRotate(degree);
-        Bitmap bmp = Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);
-        return bmp;
+
+        final int srcWidth = src.getWidth();
+        final int srcHeight = src.getHeight();
+
+        int outWidth = srcWidth;
+        int outHeight = srcHeight;
+
+        int minWidth = 512;
+        int minHeight = 512;
+
+        while(outWidth > minWidth && outHeight > minHeight) {
+            try {
+                float scaleWidth = ((float) outWidth) / srcWidth;
+                float scaleHeight = ((float) outHeight) / srcHeight;
+                matrix.postScale(scaleWidth, scaleHeight);
+                
+                Bitmap bmp = Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);
+                src.recycle();
+
+                return bmp;
+            } catch (OutOfMemoryError e) {
+                outWidth /= 2;
+                outHeight /= 2;
+
+                Log.d(TAG, "Caught OOME.  Trying new outHeight=" + outHeight + ", outWidth=" + outWidth );
+            }
+        }
+
+        Toast.makeText(activity, "Failed to rotate image: not enough memory", Toast.LENGTH_LONG).show();
+        return null;
     }
 
     public static int getOrientationInDegree(Activity activity) {

@@ -188,7 +188,7 @@ public class CropImage extends MonitoredActivity {
                 new View.OnClickListener() {
                     public void onClick(View v) {
 
-                        mBitmap = Util.rotateImage(mBitmap, -90);
+                        mBitmap = Util.rotateImage(CropImage.this, mBitmap, -90);
                         RotateBitmap rotateBitmap = new RotateBitmap(mBitmap);
                         mImageView.setImageRotateBitmapResetBase(rotateBitmap, true);
                         mRunFaceDetection.run();
@@ -199,7 +199,7 @@ public class CropImage extends MonitoredActivity {
                 new View.OnClickListener() {
                     public void onClick(View v) {
 
-                        mBitmap = Util.rotateImage(mBitmap, 90);
+                        mBitmap = Util.rotateImage(CropImage.this, mBitmap, 90);
                         RotateBitmap rotateBitmap = new RotateBitmap(mBitmap);
                         mImageView.setImageRotateBitmapResetBase(rotateBitmap, true);
                         mRunFaceDetection.run();
