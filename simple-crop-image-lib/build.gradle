@@ -4,25 +4,25 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.0'
-        classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.+'
+        classpath "com.android.tools.build:gradle:${project.ANDROID_BUILD_DEPENDENCY_BUILD_TOOLS_VERSION}"
+        classpath "com.jakewharton.sdkmanager:gradle-plugin:${project.ANDROID_BUILD_DEPENDENCY_SDKMANAGER_VERSION}"
     }
 }
 
 apply plugin: 'android-sdk-manager'
-apply plugin: 'android-library'
+apply plugin: 'com.android.library'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:23.1.0'
+    compile "com.android.support:support-v4:${project.ANDROID_SUPPORT_LIB_VERSION}"
 }
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion "19.1"
+    compileSdkVersion Integer.parseInt(project.ANDROID_COMPILE_SDK_VERSION)
+    buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
 
     defaultConfig {
         minSdkVersion 4
