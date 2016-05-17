@@ -5,11 +5,9 @@ buildscript {
 
     dependencies {
         classpath "com.android.tools.build:gradle:${project.ANDROID_BUILD_DEPENDENCY_BUILD_TOOLS_VERSION}"
-        classpath "com.jakewharton.sdkmanager:gradle-plugin:${project.ANDROID_BUILD_DEPENDENCY_SDKMANAGER_VERSION}"
     }
 }
 
-apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.library'
 
 repositories {
