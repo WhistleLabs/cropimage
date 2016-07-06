@@ -4,26 +4,38 @@ buildscript {
     }
 
     dependencies {
-        classpath "com.android.tools.build:gradle:${project.ANDROID_BUILD_DEPENDENCY_BUILD_TOOLS_VERSION}"
+        classpath "com.android.tools.build:gradle:2.1.0"
     }
 }
 
 apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
 
 repositories {
     mavenCentral()
+    maven {
+        credentials {
+            username WHISTLE_MAVEN_USERNAME
+            password WHISTLE_MAVEN_PASSWORD
+        }
+        url 'https://whistlerepo1.jfrog.io/whistlerepo1/libs-release-local/'
+    }
 }
 
 dependencies {
-    compile "com.android.support:support-v4:${project.ANDROID_SUPPORT_LIB_VERSION}"
+    compile "com.android.support:support-v4:24.0.0"
 }
 
 android {
-    compileSdkVersion Integer.parseInt(project.ANDROID_COMPILE_SDK_VERSION)
-    buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
+    compileSdkVersion 19
+    buildToolsVersion "19.1"
 
     defaultConfig {
         minSdkVersion 4
+        versionName "1.0.0"
+
+        // enforce that maven gets updated. TODO: figure out how to grab versionName from other gradle scripts
+        assert versionName == VERSION_NAME
     }
 
     sourceSets {
@@ -45,4 +57,10 @@ android {
             }
         }
     }
+
+    lintOptions {
+        abortOnError false
+    }
 }
+
+apply from: 'gradle/gradle-mvn-push.gradle'
