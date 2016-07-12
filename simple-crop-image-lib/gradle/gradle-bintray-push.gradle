@@ -1,0 +1,96 @@
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
+
+install {
+    repositories.mavenInstaller {
+        pom.project {
+            name POM_NAME
+            description POM_DESCRIPTION
+            url POM_URL
+            inceptionYear POM_INCEPTION_YEAR
+
+            packaging POM_PACKAGING
+            groupId GROUP
+            artifactId POM_ARTIFACT_ID
+            version VERSION_NAME
+
+            licenses {
+                license {
+                    name POM_LICENCE_NAME
+                    url POM_LICENCE_URL
+                    distribution POM_LICENCE_DIST
+                }
+            }
+
+            scm {
+                connection POM_SCM_CONNECTION
+                url POM_SCM_URL
+
+            }
+            developers {
+                developer {
+                    name 'Whistle'
+                }
+            }
+        }
+    }
+}
+
+bintray {
+    user = getMavenUsername()
+    key = getMavenPassword()
+    publications = ['aar']
+    publish = VERSION_NAME.contains("SNAPSHOT")
+    override = VERSION_NAME.contains("SNAPSHOT")
+    pkg {
+        repo = 'maven-internal'
+        name = POM_ARTIFACT_ID
+        userOrg = 'whistle'
+//        licenses = [POM_LICENCE_NAME]
+        vcsUrl = POM_SCM_URL
+
+        version {
+            name = VERSION_NAME
+            desc = POM_DESCRIPTION
+            released = new Date()
+        }
+    }
+}
+
+publishing {
+    publications {
+        aar(MavenPublication) {
+            groupId GROUP
+            artifactId POM_ARTIFACT_ID
+            version VERSION_NAME
+
+            artifact file("build/outputs/aar/${POM_NAME}-release.aar")
+            artifact androidJavadocsJar
+            artifact androidSourcesJar
+        }
+    }
+}
+
+task androidJavadocs(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    options.addStringOption("tag", 'inspiredby::"Inspired by:"')
+}
+
+task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+    classifier = 'javadoc'
+    from androidJavadocs.destinationDir
+}
+
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.sourceFiles
+}
+
+def getMavenUsername() {
+    project.hasProperty("WHISTLE_MAVEN_USERNAME") ? project.property("WHISTLE_MAVEN_USERNAME") : System.getenv('WHISTLE_MAVEN_USERNAME')
+}
+
+def getMavenPassword() {
+    project.hasProperty('WHISTLE_MAVEN_PASSWORD') ? project.property('WHISTLE_MAVEN_PASSWORD') : System.getenv('WHISTLE_MAVEN_PASSWORD')
+}
