@@ -3,6 +3,8 @@ gen/
 png/
 target/
 .settings/
+.gradle/
+*.swp
 .classpath
 *.class
 *.log

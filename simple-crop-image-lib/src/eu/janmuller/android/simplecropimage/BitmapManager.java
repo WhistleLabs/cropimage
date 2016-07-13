@@ -27,13 +27,13 @@ import java.util.WeakHashMap;
 
 /**
  * This class provides several utilities to cancel bitmap decoding.
- * <p/>
+ * <br>
  * The function decodeFileDescriptor() is used to decode a bitmap. During
  * decoding if another thread wants to cancel it, it calls the function
  * cancelThreadDecoding() specifying the Thread which is in decoding.
- * <p/>
+ * <br>
  * cancelThreadDecoding() is sticky until allowThreadDecoding() is called.
- * <p/>
+ * <br>
  * You can also cancel decoding for a set of threads using ThreadSet as
  * the parameter for cancelThreadDecoding. To put a thread into a ThreadSet,
  * use the add() method. A ThreadSet holds (weak) references to the threads,

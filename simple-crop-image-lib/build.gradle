@@ -1,29 +1,35 @@
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
     }
 
     dependencies {
-        classpath "com.android.tools.build:gradle:${project.ANDROID_BUILD_DEPENDENCY_BUILD_TOOLS_VERSION}"
+        classpath "com.android.tools.build:gradle:2.1.0"
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.3'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.1'
     }
 }
 
 apply plugin: 'com.android.library'
 
 repositories {
-    mavenCentral()
+    jcenter()
 }
 
 dependencies {
-    compile "com.android.support:support-v4:${project.ANDROID_SUPPORT_LIB_VERSION}"
+    compile "com.android.support:support-v4:24.0.0"
 }
 
 android {
-    compileSdkVersion Integer.parseInt(project.ANDROID_COMPILE_SDK_VERSION)
-    buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
+    compileSdkVersion 19
+    buildToolsVersion "19.1"
 
     defaultConfig {
         minSdkVersion 4
+        versionName "1.0.0"
+
+        // enforce that maven gets updated. TODO: figure out how to grab versionName from other gradle scripts
+        assert versionName == VERSION_NAME
     }
 
     sourceSets {
@@ -45,4 +51,10 @@ android {
             }
         }
     }
+
+    lintOptions {
+        abortOnError false
+    }
 }
+
+apply from: 'gradle/gradle-bintray-push.gradle'
