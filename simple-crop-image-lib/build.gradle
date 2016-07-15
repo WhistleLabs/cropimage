@@ -26,10 +26,7 @@ android {
 
     defaultConfig {
         minSdkVersion 4
-        versionName "1.0.0"
-
-        // enforce that maven gets updated. TODO: figure out how to grab versionName from other gradle scripts
-        assert versionName == VERSION_NAME
+        versionName VERSION_NAME
     }
 
     sourceSets {

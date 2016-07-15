@@ -11,3 +11,5 @@ target/
 *.iml
 .DS_Store
 build/
+.idea
+local.properties
